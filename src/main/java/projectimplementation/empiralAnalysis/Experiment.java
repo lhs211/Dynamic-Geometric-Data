@@ -27,7 +27,6 @@ public class Experiment {
     private static final GuardianAssignment[] c4 = new GuardianAssignment[]{FIRST, FIRST, FIRST, FIRST, FIRST, FIRST};
     private static final GuardianAssignment[] c5 = new GuardianAssignment[]{CLOSEST, CLOSEST, CLOSEST, CLOSEST, CLOSEST, CLOSEST};
     private static final GuardianAssignment[] c6 = new GuardianAssignment[]{FEWEST, FEWEST, FEWEST, FEWEST, FEWEST, FEWEST};
-    private static final GuardianAssignment[] c7 = new GuardianAssignment[]{FEWEST, OPTIMAL, FEWEST, OPTIMAL, OPTIMAL, OPTIMAL};
 
 
     private static final List<GuardianAssignment[]> combinations = new ArrayList<>(Arrays.asList(c1, c2, c3, c4, c5, c6));
@@ -56,20 +55,10 @@ public class Experiment {
     }
 
     public static void main(String... args) throws InterruptedException {
-        runAllExperiments();
-        // runOneExperiment();
+        //runAllExperiments();
+        runOneExperiment();
        //testC();
-        //testLinearList();
-    }
-
-    private static void testLinearList() throws InterruptedException {
-        int DOMINATED = 48976;
-        int NON_DOMINATED = 1024;
-        double c = 1.0;
-        distribution = new AnalyticalDistribution(2);
-        Experiment experiment = new Experiment(2, 0, DOMINATED, NON_DOMINATED, c, "linear.dat");
-
-        experiment.runSimulations();
+        // testLinearList();
     }
 
     private static void runOneExperiment() throws InterruptedException {
@@ -77,43 +66,9 @@ public class Experiment {
         int NON_DOMINATED = 1024;
         double c = 1.0;
         distribution = new AnalyticalDistribution(2);
-        List<AnalyticalSolution> vectorSequence = distribution.calculateSequence(DOMINATED, NON_DOMINATED, c);
-        DynamicArchive<GuardianSolution> population = new GuardianArchive(2, comparator, NondominatedPopulation.DuplicateMode.ALLOW_DUPLICATES, new ManhattanDistance(), c6);
         Experiment experiment = new Experiment(2, 0, DOMINATED, NON_DOMINATED, c, "results.dat");
 
         experiment.runSimulations();
-    }
-
-    private static void testC() {
-        double probability;
-        double d;
-        int nonDominatedPointsSoFar = 0;
-        int dominated = 49488;
-        int nonDominated = 512;
-        Random random = new Random();
-
-
-        for (double c = 0.1; c < 2.0; c += 0.1) {
-            int overAllIndex = 0;
-            for (int i = 0; i < 10000; i++) {
-                int meanIndex = 0;
-                nonDominatedPointsSoFar = 0;
-                for (int t = 1; t <= nonDominated + dominated; t++) {
-
-                    probability = c * (((double) (nonDominated - nonDominatedPointsSoFar))) / (((double) (nonDominated + dominated) - t));
-
-                    if (random.nextDouble() < probability) {
-                        d = 0; // non dominated, c=1.1, later in sequence
-                        nonDominatedPointsSoFar += 1;
-                        meanIndex += t;
-                    } else {
-                        d = 1; /// ((double) (nonDominated + dominated));
-                    }
-                }
-                overAllIndex += meanIndex / nonDominatedPointsSoFar;
-            }
-            System.out.println("c=" + c + ", index=" + overAllIndex/10000);
-        }
     }
 
     private static void runAllExperiments() throws InterruptedException {
@@ -307,8 +262,8 @@ public class Experiment {
             long total = 0;
             for (int i = 0; i < N; i++) {
                 List<AnalyticalSolution> vectorSequence = this.distribution.calculateSequence(this.dominated, this.nonDominated, this.c);
-                //DynamicArchive<GuardianSolution> population = new GuardianArchive(dimensions, comparator, NondominatedPopulation.DuplicateMode.ALLOW_DUPLICATES, new EuclideanDistance(), combinations.get(combinationIndex));
-                DynamicArchive<GuardianSolution> population = new ListArchive(dimensions, comparator);
+                DynamicArchive<GuardianSolution> population = new GuardianArchive(dimensions, comparator, NondominatedPopulation.DuplicateMode.ALLOW_DUPLICATES, new EuclideanDistance(), combinations.get(combinationIndex));
+                //DynamicArchive<GuardianSolution> population = new ListArchive(dimensions, comparator);
                 total += simulation.runSimulation(this, vectorSequence, population);
                 comparator.resetCount();
             }

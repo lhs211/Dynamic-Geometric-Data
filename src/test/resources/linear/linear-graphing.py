@@ -142,8 +142,8 @@ if __name__ == "__main__":
         plot_population_comparisons(
             population_size, comparisons, file, max_comparisons_log)
 
-        plot_population_times(
-            population_size, times, file, max_time_log)
+        #plot_population_times(
+            #population_size, times, file, max_time_log)
 
         # find only elite member comparisons
         #plot_population_eliteComparisons(
