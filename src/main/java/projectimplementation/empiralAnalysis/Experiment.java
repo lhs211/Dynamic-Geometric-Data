@@ -62,8 +62,8 @@ public class Experiment {
     }
 
     private static void runOneExperiment() throws InterruptedException {
-        int DOMINATED = 48976;
-        int NON_DOMINATED = 1024;
+        int DOMINATED = 49488;
+        int NON_DOMINATED = 512;
         double c = 1.0;
         distribution = new AnalyticalDistribution(2);
         Experiment experiment = new Experiment(2, 0, DOMINATED, NON_DOMINATED, c, "results.dat");
